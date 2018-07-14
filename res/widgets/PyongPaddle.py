@@ -1,10 +1,11 @@
-from kivy.properties import NumericProperty
+from kivy.properties import NumericProperty, StringProperty
 from kivy.uix.widget import Widget
 from kivy.vector import Vector
 
 
 class PyongPaddle(Widget):
     score = NumericProperty(0)
+    name = StringProperty('Player')
 
     def bounce_ball(self, ball):
         if self.collide_widget(ball):

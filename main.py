@@ -14,15 +14,30 @@ from res.widgets.PyongPaddle import PyongPaddle
 
 class PyongGame(Widget):
     log = logging.getLogger('Game Log')
+    game_paused = False
+    win_score = 10
+
+    winner_label = ObjectProperty(None)
 
     pyong_ball = ObjectProperty(None)
     player1 = ObjectProperty(None)
     player2 = ObjectProperty(None)
 
+    def game_over(self):
+        if self.player1.score >= self.win_score:
+            self.winner_label.text = '{}\nWINS!!!'.format(self.player1.name)
+            self.game_paused = True
+            return True
+        elif self.player2.score >= self.win_score:
+            self.winner_label.text = '{}\nWINS!!!'.format(self.player2.name)
+            self.game_paused = True
+            return True
+        return False
+
     def serve_ball(self, switch=True):
         angle = randint(-60, 60)
         if switch:
-            angle += 360
+            angle += 180
         self.pyong_ball.center = self.center
         self.pyong_ball.velocity = Vector(4, 0).rotate(angle)
 
@@ -32,8 +47,8 @@ class PyongGame(Widget):
         if touch.x > self.width - self.width / 3:
             self.player2.center_y = touch.y
 
-    def update(self, dt):
-        self.pyong_ball.move(dt)
+    def game_loop(self, elapsed_time):
+        self.pyong_ball.move(elapsed_time)
 
         self.player1.bounce_ball(self.pyong_ball)
         self.player2.bounce_ball(self.pyong_ball)
@@ -49,6 +64,10 @@ class PyongGame(Widget):
         if self.pyong_ball.center_x > self.width:
             self.player1.score += 1
             self.serve_ball()
+
+    def update(self, dt):
+        if not self.game_paused and not self.game_over():
+            self.game_loop(dt)
 
 
 class PyongApp(App):

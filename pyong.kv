@@ -19,6 +19,8 @@
     player1: player_left
     player2: player_right
 
+    winner_label: winner_label
+
     canvas:
         Rectangle:
             pos: self.center_x - 5, 0
@@ -36,6 +38,15 @@
         top: root.top - 50
         text: str(root.player2.score)
 
+    Label:
+        id: winner_label
+        font_size: 100
+        center_x: root.width / 3
+        center_y: self.parent.center_y
+        width: self.parent.width / 3
+        halign: 'center'
+        valign: 'center'
+
     PyongBall:
         id: pyong_ball
         center: self.parent.center
@@ -44,8 +55,10 @@
         id: player_left
         x: root.x
         center_y: root.center_y
+        name: 'Player 1'
 
     PyongPaddle:
         id: player_right
         x: root.width-self.width
         center_y: root.center_y
+        name: 'Player 2'
